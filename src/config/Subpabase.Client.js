@@ -5,8 +5,9 @@ export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_KEY,
   {
     auth: {
-      persistSession: true,   // ✅ store session in localStorage
-      autoRefreshToken: true, // ✅ refresh session automatically
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
     },
   }
 );

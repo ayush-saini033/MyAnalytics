@@ -16,21 +16,35 @@ import {
 import { supabase } from "@/config/Subpabase.Client";
 
 const DashboardPage = () => {
-  const user = useUser();
   const router = useRouter();
-
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Wait until we check session
   const [websites, setWebsites] = useState([]);
 
-  console.log(user);
-
+  // Check user session
   useEffect(() => {
-    if (!user) {
-      router.push("/signin");
-    }
-  }, [user, router]);
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
+      console.log("Logged in user:", user);
+
+      if (!user) {
+        router.push("/signin");
+      } else {
+        setUser(user);
+      }
+
+      setLoading(false);
+    };
+
+    checkUser();
+  }, [router]);
+
+  // Fetch websites once user is ready
   useEffect(() => {
-    if (!user?.id) return; // wait until user is available
+    if (!user?.id) return;
 
     const fetchWebsites = async () => {
       try {
@@ -48,7 +62,15 @@ const DashboardPage = () => {
     };
 
     fetchWebsites();
-  }, [user?.id, supabase]); // dependencies
+  }, [user?.id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-white">
+        Checking session...
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black min-h-screen w-full text-white relative overflow-hidden">

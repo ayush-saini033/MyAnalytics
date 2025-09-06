@@ -1,6 +1,7 @@
 "use client";
 
 import { supabase } from "@/config/Subpabase.Client";
+import useUser from "@/hooks/useUser";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
@@ -29,6 +30,7 @@ const SignInPage = () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    console.log(user)
     if (user) {
       if (user.role === "authenticated") router.push("/dashboard");
     }
