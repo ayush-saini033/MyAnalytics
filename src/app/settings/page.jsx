@@ -219,7 +219,7 @@ const SettingsPage = () => {
 
 export default SettingsPage;
 
-export const CodeComp = ({ apiKey }) => {
+const CodeComp = ({ apiKey }) => {
 
       const [copied, setCopied] = useState(false);
 
